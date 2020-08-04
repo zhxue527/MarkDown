@@ -1,43 +1,75 @@
-# 1. Git初始化、仓库创建和操作
+# 版本控制
 
-## 基本信息设置
+## 版本控制思想
 
-1. 设置用户名
-   `git config --global user.name ‘username’`
-2. 设置用户名邮箱
-   `git config --global user.email 'zh_xue@aliyun.com'`
+**作用：**
 
-## 初始化一个新的Git仓库
+1. 个人
+   记录开发阶段的历史状态
+2. 团队
+   解决协同开发导致的覆盖
 
-1. 创建文件夹
-   `mkdir dictionaryName`
-2. 对文件夹进行初始化
-   `cd dictionaryName`
-   `git init`
-3. 向仓库上传新文件
-   `touch test.java`：创建文件
-   `git status`
-   `git add test.java`：添加到暂存区
-   `git status`
-   `git commit -m 'describe'`：上传至Git仓库
-4. 修改文件并上传更新
-   `vim test.java`
-   `git status`
-   `git add test.java`
-   `git status`
-   `git commit -m 'modified'`
-5. 删除文件并上传更新
-   `rm -rf test.java`
-   `git rm test.java`
-   `git commit -m 'remove'`
-   `git status`
+**功能：**
 
-# 2. Git管理远程仓库
+1. 协同修改
+   - 多人并行不悖地修改服务器的同一文件
+2. 数据备份
+   - 保存目录和文件的 *所有状态* （当前状态 + 历史状态）
+3. 版本管理
+   - 版本状态的保存要做到不保存重复数据，节约存储空间。
+   - Git：文件系统快照机制
+   - SVN：增量式管理
+4. 权限控制
+   - 对 *团队中* 参与开发的人员进行**权限控制**
+   - 对 *团队外* 参与开发的人员进行**代码审核 **-- Git独有
+5. 历史记录
+   - 每个版本状态的修改人、修改时间、修改内容、日志信息
+   - 将本地文件恢复到某一历史状态
+6. 分支管理
+   - 允许开发团队在工作过程中多条生产线同时推进任务，进一步提高效率
 
-## 本地仓库去克隆远程仓库
+## 版本控制工具
 
-`git clone URL`
+1. **集中式版本控制工具： **
+   - CVS、SVN、VSS、……
+2. **分布式版本控制工具：**
+   - Git、Mercurial、Bazaar、Darcs、……
 
-## 本地仓库同步到远程仓库
+# Git
 
-`git push`
+## Git本地结构
+
+<img src="D:\Me\career\MarkDown\photo\Snipaste_2020-08-04_21-41-15.png" alt="Snipaste_2020-08-04_21-41-15" style="zoom:63%;" />
+
+## 代码托管中心
+
+任务：维护远程库
+
+1. 局域网环境下：
+   - GitLab服务器
+2. 外网环境下：
+   - GitHub
+   - 码云
+
+## 本地库基本操作
+
+1. 本地库初始化
+2. 设置签名
+3. 基本操作
+4. 版本穿梭
+
+## 本地库分支管理
+
+## GitHub账号注册及远程库创建
+
+## 本地库与远程库的交互方式
+
+在本地库配置远程库地址别名：
+
+1. 团队内部协作
+2. 跨团队协作
+
+# Git图形化界面操作
+
+# Gitlab服务器环境搭建
+
