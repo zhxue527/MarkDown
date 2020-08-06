@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="demo-RPC-proto" />
+        <module name="demo-RPC-transport" />
+        <module name="demo-RPC-server" />
+        <module name="demo-RPC-codec" />
+        <module name="demo-RPC-common" />
+        <module name="demo-RPC-cleint" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="demo-RPC-Client" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

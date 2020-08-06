@@ -10,15 +10,47 @@
    - Procedure - 一段可执行代码
    - Call - 调用
    - 是分布式系统常见的一种通信方法
+   - 远程调用：
+     - 把进程内部的部分逻辑放到其他机器上去执行，即业务拆解。
+     - 让每个服务仅对单个业务负责，使得服务具备独立的可扩展性、可升级性、易维护性
+   - 过程调用：
+     - 程序内控制和数据的传输
+   
 2. 做什么？
+   
    提供跨进程交互形式：RESTful、WebService、HTTP、基于DB做数据交换、基于MQ做数据交换，以及RPC。
+   
    - 依赖存储中间件做数据交互：
      - MySQL、RabbitMQ、Kafka、Redis
      - 两个系统是异步的
    - 直接交互：
      - RESTful、WebService、RPC、HTTP
      - 客户端与服务端同步
-3. 专业术语
+   
+   > RPC将Client和Server通信细节封装，Client提供调用方法名、参数、返回值信息，Server解析报文，执行对应方法然后将返回值返回
+   
+3. 为什么要使用RPC？
+   用于建立分布式计算（服务）
+
+4. 专业术语
+
+   - Client：服务调用方，作用是通过Client-stub向服务提供方Server发起调用，并且接受从Client-stub返回的调用结果；
+   - Client-stub：
+     - 服务调用方的本地存根对象，是一个可执行体；
+     - 类似于反射获得的invoke；
+     - 作用是①将需要远程调用的接口、方法及参数通过约定好的协议进行序列化，②将序列化的数据通过RpcRuntime对象进行传输，③将服务提供方的返回值序列化为Client可以直接使用的对象；
+   - RpcRuntime：远程调用运行时的对象，存在于服务双方。作用是建立起双方的连接，以便进行远程通信；
+   - Server-stub：
+     - 服务提供方的本地存根对象；
+     - 作用是①将从RpcRuntime中读取的数据进行反序列化，②调用本地方法，③把返回值进行序列化传输到RpcRuntime进行发送；
+   - Server：服务提供方，提供服务的业务逻辑，Server-stub调用的本地方法就是Server中的方法。
+
+5. RPC、分布式本身的问题：
+
+   - 通信延迟
+   - 地址空间被隔离
+   - 局部故障：发生的概率变高，定位变难
+   - 并发问题：多个服务调一个服务
 
 ## 现有框架对比
 
@@ -135,7 +167,138 @@ New -> Module…
 
 ## 二：proto模块
 
+```java
+/**
+ * @PackageName: com.pill
+ * @ClassName: Peer
+ * @Description: 表示网络传输的端点
+ * @Author: SKY
+ * @Data:: 2020/08/06
+ */
+@Data
+@AllArgsConstructor
+public class Peer {
+    private String host;
+    private int port;
+}
+```
+
+```java
+/**
+ * @PackageName: com.pill
+ * @ClassName: Request
+ * @Description:
+ * @Author: SKY
+ * @Data:: 2020/08/06
+ */
+@Data
+public class Request {
+    private ServiceDescriptor service;
+    private Object[] parameters;
+}
+```
+
+```java
+/**
+ * @PackageName: com.pill
+ * @ClassName: Response
+ * @Description: 表示RPC返回
+ * @Author: SKY
+ * @Data:: 2020/08/06
+ */
+@Data
+public class Response {
+    /***
+     * 服务返回编码：0-成功，非0失败
+     */
+    private int code = 0;
+    /***
+     * 具体的错误信息
+     */
+    private String message = "OK";
+    /***
+     * 返回的数据
+     */
+    private Object data;
+}
+```
+
+```java
+/**
+ * @PackageName: com.pill
+ * @ClassName: ServiceDescriptor
+ * @Description: 表示服务
+ * @Author: SKY
+ * @Data:: 2020/08/06
+ */
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class ServiceDescriptor {
+    private String clazz;
+    private String method;
+    private String returnType;
+    private String[] parameterTypes;
+}
+```
+
+
+
 ## 三：common模块
+
+反射工具类
+
+```java
+public class ReflectionUtils {
+    /**
+     * 根据class创建对象
+     * @param clazz 待创建对象的类
+     * @param <T>   对象类型
+     * @return  创建好的对象
+     */
+    public static <T> T newInstance(Class<T> clazz) {
+        try {
+            return clazz.newInstance();
+        }catch (Exception e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
+    /**
+     * 获取某个class的公有方法
+     * @param clazz 待获取方法的类
+     * @return 当前类声明的公有方法
+     */
+    public static Method[] getPublicMethods(Class clazz) {
+        Method[] methods = clazz.getDeclaredMethods();
+        List<Method> pMethods = new ArrayList<>();
+        for (Method m: methods
+             ) {
+            if (Modifier.isPublic(m.getModifiers())) {
+                pMethods.add(m);
+            }
+        }
+        return pMethods.toArray(new Method[0]);
+    }
+
+    /**
+     * 调用指定对象的指定方法，并返回结果
+     * @param obj 调用的对象
+     * @param method 调用的方法
+     * @param args 方法的参数
+     * @return 返回值
+     */
+    public static Object invoke(Object obj, Method method, Object... args) {
+        try {
+            return method.invoke(obj, args);
+        } catch (Exception e) {
+            throw new IllegalStateException(e);
+        }
+    }
+}
+```
+
+
 
 ## 四：codec模块
 
