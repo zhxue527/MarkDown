@@ -9,7 +9,7 @@ import org.apache.commons.io.IOUtils;
 import java.io.IOException;
 
 @Slf4j
-public class Server {
+public class RpcServer {
     private ServerConfig config;
     private TransportServer net;
     private Encoder encoder;
@@ -17,7 +17,7 @@ public class Server {
     private ServiceManager serviceManager;
     private ServiceInvoker serviceInvoker;
 
-    public Server(ServerConfig config) {
+    public RpcServer(ServerConfig config) {
         this.config = config;
 
         // net
@@ -31,6 +31,10 @@ public class Server {
         // service
         this.serviceManager = new ServiceManager();
         this.serviceInvoker = new ServiceInvoker();
+    }
+
+    public RpcServer() {
+        this(new ServerConfig());
     }
 
     public <T> void register(Class<T> interfaceClass, T bean) {

@@ -6,12 +6,13 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="demo-RPC-client" />
+        <module name="demo-RPC-codec" />
+        <module name="demo-RPC-example" />
+        <module name="demo-RPC-common" />
         <module name="demo-RPC-proto" />
         <module name="demo-RPC-transport" />
         <module name="demo-RPC-server" />
-        <module name="demo-RPC-client" />
-        <module name="demo-RPC-codec" />
-        <module name="demo-RPC-common" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>

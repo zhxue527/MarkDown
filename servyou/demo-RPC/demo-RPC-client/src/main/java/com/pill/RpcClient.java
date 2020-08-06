@@ -6,17 +6,17 @@ import com.pill.utils.ReflectionUtils;
 
 import java.lang.reflect.Proxy;
 
-public class Client {
+public class RpcClient {
     private ClientConfig config;
     private Encoder encoder;
     private Decoder decoder;
     private TransportSelector selector;
 
-    public Client() {
+    public RpcClient() {
         this(new ClientConfig());
     }
 
-    public Client(ClientConfig config) {
+    public RpcClient(ClientConfig config) {
         this.config = config;
 
         this.encoder = ReflectionUtils.newInstance(this.config.getEncoderClass());
