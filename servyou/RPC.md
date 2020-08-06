@@ -65,8 +65,38 @@
 
 ## 原理剖析
 
+### 服务暴露和引用过程
+
 ![RPC整体架构](D:\Me\career\MarkDown\photo\RPC整体架构.png)
-![RPC_Call过程](D:\Me\career\MarkDown\photo\RPC_Call过程.png)
+
+1. 服务暴露
+   服务暴露过程就是将服务绑定到端口（用作Client调用服务的地址）的过程。
+   - 暴露到本地：用于业务划分，让服务职责划分变清晰
+   - 暴露到远程：使得 **host:port** 作为服务的唯一标识。
+     - 直接暴露式：创建接口实现类代理，绑定至端口，等待调用
+     - 注册中心式：创建接口实现类代理，绑定至端口，同时注册到注册中心
+2. 服务引用
+   服务引用过程就是Client和Server服务建立连接的过程。
+   大致分为2个步骤：①连接Server；②创建接口代理
+   - 直连式：Client直接根据**host:port**连接远程服务。一般用于服务测试；
+   - 注册中心式：Client通过注册中心来获取**host:port**，然后再进行服务调用；这种方式还可以让注册中心保存Client的**host:port**用于及时通知Client更新服务地址变更
+
+### 方法调用过程
+
+完成服务暴露和引用后，就可以在Client利用代理对象发起方法调用。
+
+![RPC_Call过程](D:\MarkDown\photo\RPC_Call过程.png)
+
+1. Client执行Server的一个方法：必须传输 ①方法的全限定名 以及 ②方法参数列表 给Server
+2. Client和Server传输的请求包按照约定好的统一序列化协议进行序列化
+3. Client将序列化后的数据通过RpcRuntime进行传输，RpcRuntime进行等待\监听
+4. Server通过RpcRuntime接收请求包，传递给Server-stub；
+5. Server-stub ①用统一的序列化协议进行反序列化，解析请求数据，②根据解析的数据来定位需要调用的具体方法，将方法参数列表传递给Server；
+6. Server 执行对应的方法，并返回执行结果给 Server-stub；
+7. Server-stub 将结果序列化后传递给RpcRuntime；
+8. Server 的 RpcRuntime 将返回结果发送给 Client 的 RpcRuntime；
+9. Client 的 RpcRuntime 把接收到的数据传输给 User-stub；
+10. User-stub 将返回结果反序列化后传递给最初的调用方，继续后续逻辑处理。
 
 ## 技术栈介绍
 
