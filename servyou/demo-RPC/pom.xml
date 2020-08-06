@@ -14,8 +14,7 @@
         <module>demo-RPC-codec</module>
         <module>demo-RPC-transport</module>
         <module>demo-RPC-server</module>
-        <module>demo-RPC-Client</module>
-        <module>demo-RPC-cleint</module>
+        <module>demo-RPC-client</module>
     </modules>
 
     <properties>
