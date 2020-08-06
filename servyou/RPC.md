@@ -67,7 +67,7 @@
 
 ### 服务暴露和引用过程
 
-![RPC整体架构](D:\Me\career\MarkDown\photo\RPC整体架构.png)
+![RPC整体架构](../photo/RPC整体架构.png)
 
 1. 服务暴露
    服务暴露过程就是将服务绑定到端口（用作Client调用服务的地址）的过程。
@@ -85,7 +85,7 @@
 
 完成服务暴露和引用后，就可以在Client利用代理对象发起方法调用。
 
-![RPC_Call过程](https://raw.githubusercontent.com/zhxue527/MarkDown/master/photo/RPC_Call%E8%BF%87%E7%A8%8B.png)
+![RPC_CallProcedure](../photo/RPC_CallProcedure.png)
 
 1. Client执行Server的一个方法：必须传输 ①方法的全限定名 以及 ②方法参数列表 给Server
 2. Client和Server传输的请求包按照约定好的统一序列化协议进行序列化
